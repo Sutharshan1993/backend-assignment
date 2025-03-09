@@ -1,9 +1,7 @@
 package com.bayzdelivery.controller;
 
 import com.bayzdelivery.model.Orders;
-import com.bayzdelivery.model.Person;
 import com.bayzdelivery.service.OrdersService;
-import com.bayzdelivery.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,7 @@ public class OrdersController {
     }
 
         @GetMapping("/getOrder/{order-id}")
-        public ResponseEntity<Orders> getOrderById(@PathVariable(name="order-id", required=true)Long orderId) {
+        public ResponseEntity<Orders> getOrderById(@PathVariable(name="order-id")Long orderId) {
         Orders orders = orderService.findById(orderId);
         if (orders != null) {
             return ResponseEntity.ok(orders);

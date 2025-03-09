@@ -1,5 +1,6 @@
 package com.bayzdelivery.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Table(name = "person")
 public class Person implements Serializable{
 
+  @Serial
   private static final long serialVersionUID = 432154291451321L;
 
   public Person() {}
@@ -82,11 +84,8 @@ public class Person implements Serializable{
     } else if (!registrationNumber.equals(other.registrationNumber))
       return false;
     if (role == null) {
-      if (other.role != null)
-        return false;
-    } else if (!role.equals(other.role))
-      return false;
-    return true;
+        return other.role == null;
+    } else return role.equals(other.role);
   }
 
   @Override

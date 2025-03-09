@@ -19,8 +19,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 
   public Delivery findById(Long deliveryId) {
     Optional<Delivery> optionalDelivery = deliveryRepository.findById(deliveryId);
-    if (optionalDelivery.isPresent()) {
-      return optionalDelivery.get();
-    }else return null;
+      return optionalDelivery.orElse(null);
   }
 }

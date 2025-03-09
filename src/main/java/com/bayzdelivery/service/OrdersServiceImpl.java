@@ -1,8 +1,6 @@
 package com.bayzdelivery.service;
 
 import com.bayzdelivery.model.Orders;
-import com.bayzdelivery.model.Orders;
-import com.bayzdelivery.model.Orders;
 import com.bayzdelivery.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

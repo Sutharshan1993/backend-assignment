@@ -25,7 +25,7 @@ public class PersonController {
     return ResponseEntity.ok(personService.getAll());
   }
 
-  @GetMapping("/person/{pers-id}")
+  @GetMapping("/person/{person-id}")
   public ResponseEntity<Person> getPersonById(@PathVariable(name="person-id", required=true)Long personId) {
     Person person = personService.findById(personId);
     if (person != null) {
