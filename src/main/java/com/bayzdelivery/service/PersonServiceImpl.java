@@ -22,8 +22,11 @@ public class PersonServiceImpl implements PersonService {
         return personList;
     }
 
-    public Person save(Person p) {
-        return personRepository.save(p);
+    public Person save(Person person) {
+        if (!person.getRole().equals("CUSTOMER") && !person.getRole().equals("DELIVERY_MAN")) {
+            throw new IllegalArgumentException("Role must be either CUSTOMER or DELIVERY_MAN");
+        }
+        return personRepository.save(person);
     }
 
     @Override

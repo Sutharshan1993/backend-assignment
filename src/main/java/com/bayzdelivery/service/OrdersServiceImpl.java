@@ -38,7 +38,8 @@ public class OrdersServiceImpl implements OrdersService{
     }
 
     @Override
-    public Orders updateOrder(Long orderId) {
+    public Orders updateOrder(Orders order) {
         return null;
     }
+
 }

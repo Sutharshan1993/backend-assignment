@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bayzdelivery.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.bayzdelivery.service.PersonService;
@@ -16,8 +17,12 @@ public class PersonController {
   PersonService personService;
 
   @PostMapping("/person")
-  public ResponseEntity<Person> register(@RequestBody Person p) {
+  public ResponseEntity<?> register(@RequestBody Person p) {
+    try{
     return ResponseEntity.ok(personService.save(p));
+  }catch (IllegalArgumentException e) {
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 
   @GetMapping("/person")

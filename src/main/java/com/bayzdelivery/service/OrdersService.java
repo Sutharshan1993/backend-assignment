@@ -14,5 +14,5 @@ public interface OrdersService {
 
     Orders deleteById(Long orderId);
 
-    Orders updateOrder(Long orderId);
+    Orders updateOrder(Orders order);
 }

@@ -3,14 +3,9 @@ package com.bayzdelivery.model;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+
+import com.bayzdelivery.utils.DeliveryStatus;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,13 +32,13 @@ public class Delivery implements Serializable{
   Instant endTime;
 
   @Column(name = "distance")
-  Long distance;
+  Double distance;
 
   @Column(name = "price")
-  Long price;
+  double price;
 
-  @Column(name = "comission")
-  Long comission;
+  @Column(name = "commission")
+  double commission;
 
   @ManyToOne
   @JoinColumn(name = "delivery_man_id", referencedColumnName = "id")
@@ -53,6 +48,13 @@ public class Delivery implements Serializable{
   @JoinColumn(name = "customer_id", referencedColumnName = "id")
   Person customer;
 
+  @ManyToOne
+  @JoinColumn(name = "order_id", referencedColumnName = "id")
+  Orders orders;
+
+  @Column(name = "status")
+  @Enumerated(EnumType.STRING)
+  DeliveryStatus status;
 
     @Override
   public int hashCode() {
@@ -64,6 +66,7 @@ public class Delivery implements Serializable{
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((customer == null) ? 0 : customer.hashCode());
     result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+    result = prime * result + ((orders == null) ? 0 : orders.hashCode());
     return result;
   }
 
@@ -101,14 +104,20 @@ public class Delivery implements Serializable{
         return false;
     } else if (!customer.equals(other.customer))
       return false;
+    if (orders == null) {
+      if (other.orders != null)
+        return false;
+    } else if (!orders.equals(other.orders))
+      return false;
     if (startTime == null) {
         return other.startTime == null;
     } else return startTime.equals(other.startTime);
+
   }
 
   @Override
   public String toString() {
-    return "Delivery [id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + ", distance=" + distance + ", deliveryMan=" + deliveryMan + ", customer=" + customer + "]";
+    return "Delivery [id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + ", distance=" + distance + ", deliveryMan=" + deliveryMan + ", customer=" + customer + "]"+ ", orders=" + orders + "]";
   }
 
 

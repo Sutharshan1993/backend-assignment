@@ -22,4 +22,13 @@ public class GlobalExceptionHandler {
         new AbstractMap.SimpleEntry<>("message", "Request could not be processed");
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(DeliveryNotFoundException.class)
+  public ResponseEntity<String> handleDeliveryNotFoundExceptionException(IllegalArgumentException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+  }
 }
