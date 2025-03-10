@@ -2,16 +2,18 @@ package com.bayzdelivery.repositories;
 
 import com.bayzdelivery.dto.DeliveryManCommission;
 import com.bayzdelivery.model.Delivery;
+import com.bayzdelivery.utils.DeliveryStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
 
-@RepositoryRestResource(exported = false)
+@Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     @Query("SELECT COUNT(d) FROM Delivery d WHERE d.deliveryMan.id = :deliveryManId AND d.status = 'ACTIVE'")
     int countActiveDeliveriesByDeliveryManId(@Param("deliveryManId") Long deliveryManId);
@@ -29,5 +31,11 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     List<Object[]> findTopDeliveryMenByCommission(
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
+    );
+
+    @Query("SELECT d FROM Delivery d WHERE d.status = :status AND d.startTime < :threshold")
+    List<Delivery> findByStatusAndStartTimeBefore(
+            @Param("status") DeliveryStatus status,
+            @Param("threshold") Instant threshold
     );
 }

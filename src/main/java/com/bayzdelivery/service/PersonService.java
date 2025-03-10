@@ -1,13 +1,15 @@
 package com.bayzdelivery.service;
 
 import java.util.List;
+
+import com.bayzdelivery.dto.PersonRegisterResponse;
 import com.bayzdelivery.model.Person;
 
 public interface PersonService {
-  List<Person> getAll();
+  List<PersonRegisterResponse> getAll();
 
-  Person save(Person p);
+  PersonRegisterResponse save(Person p);
 
-  Person findById(Long personId);
+  PersonRegisterResponse findById(Long personId);
 
 }

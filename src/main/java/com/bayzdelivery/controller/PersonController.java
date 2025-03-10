@@ -2,6 +2,7 @@ package com.bayzdelivery.controller;
 
 import java.util.List;
 
+import com.bayzdelivery.dto.PersonRegisterResponse;
 import com.bayzdelivery.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,23 +17,22 @@ public class PersonController {
   @Autowired
   PersonService personService;
 
-  @PostMapping("/person")
-  public ResponseEntity<?> register(@RequestBody Person p) {
-    try{
-    return ResponseEntity.ok(personService.save(p));
-  }catch (IllegalArgumentException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+  @PostMapping("/register")
+  public ResponseEntity<PersonRegisterResponse> register(@RequestBody Person p) {
+    PersonRegisterResponse personRegisterResponse =personService.save(p);
+    return ResponseEntity.ok(personRegisterResponse);
+
   }
 
-  @GetMapping("/person")
-  public ResponseEntity<List<Person>> getAllPersons() {
-    return ResponseEntity.ok(personService.getAll());
+  @GetMapping("/getAllpersons")
+  public ResponseEntity<List<PersonRegisterResponse>> getAllPersons() {
+    List<PersonRegisterResponse> personRegisterResponse =personService.getAll();
+    return ResponseEntity.ok(personRegisterResponse);
   }
 
   @GetMapping("/person/{person-id}")
-  public ResponseEntity<Person> getPersonById(@PathVariable(name="person-id", required=true)Long personId) {
-    Person person = personService.findById(personId);
+  public ResponseEntity<PersonRegisterResponse> getPersonById(@PathVariable(name="person-id", required=true)Long personId) {
+    PersonRegisterResponse person = personService.findById(personId);
     if (person != null) {
       return ResponseEntity.ok(person);
     }

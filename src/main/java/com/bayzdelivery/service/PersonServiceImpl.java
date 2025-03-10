@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.bayzdelivery.dto.PersonRegisterResponse;
+import com.bayzdelivery.exceptions.DeliveryNotFoundException;
+import com.bayzdelivery.exceptions.PersonNotFoundException;
 import com.bayzdelivery.repositories.PersonRepository;
 import com.bayzdelivery.model.Person;
+import com.bayzdelivery.utils.PersonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,22 +20,25 @@ public class PersonServiceImpl implements PersonService {
     PersonRepository personRepository;
 
     @Override
-    public List<Person> getAll() {
-        List<Person> personList = new ArrayList<>();
-        personRepository.findAll().forEach(personList::add);
-        return personList;
+    public List<PersonRegisterResponse> getAll() {
+        return personRepository.findAll()
+                .stream()
+                .map(PersonHelper::mapToResponse)
+                .toList();
     }
 
-    public Person save(Person person) {
+    public PersonRegisterResponse save(Person person) {
+        Person personReg;
         if (!person.getRole().equals("CUSTOMER") && !person.getRole().equals("DELIVERY_MAN")) {
             throw new IllegalArgumentException("Role must be either CUSTOMER or DELIVERY_MAN");
         }
-        return personRepository.save(person);
+        personReg= personRepository.save(person);
+        return new PersonRegisterResponse(personReg.getId(),personReg.getName(),personReg.getRegistrationNumber(),personReg.getRole());
     }
 
     @Override
-    public Person findById(Long personId) {
-        Optional<Person> dbPerson = personRepository.findById(personId);
-        return dbPerson.orElse(null);
+    public PersonRegisterResponse findById(Long personId) {
+        return  personRepository.findById(personId).map(PersonHelper::mapRegistedPerson).orElseThrow(() -> new PersonNotFoundException("Person not found with ID: " + personId));
+
     }
 }
