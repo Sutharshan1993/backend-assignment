@@ -3,7 +3,8 @@ package com.bayzdelivery.controller;
 import com.bayzdelivery.dto.PersonRegisterResponse;
 import com.bayzdelivery.model.Person;
 import com.bayzdelivery.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,26 +12,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/regapi")
+@RequiredArgsConstructor
 public class PersonController {
+    private final PersonService personService;
 
-    @Autowired
-    PersonService personService;
-
-    @PostMapping("/register")
-    public ResponseEntity<PersonRegisterResponse> register(@RequestBody Person p) {
+    @PostMapping("/newRegister")
+    public ResponseEntity<PersonRegisterResponse> registerNewUser(@RequestBody Person p) {
         PersonRegisterResponse personRegisterResponse = personService.save(p);
         return ResponseEntity.ok(personRegisterResponse);
 
     }
 
-    @GetMapping("/getAllpersons")
-    public ResponseEntity<List<PersonRegisterResponse>> getAllPersons() {
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<PersonRegisterResponse>> getAllUsers() {
         List<PersonRegisterResponse> personRegisterResponse = personService.getAll();
         return ResponseEntity.ok(personRegisterResponse);
     }
 
-    @GetMapping("/person/{person-id}")
-    public ResponseEntity<PersonRegisterResponse> getPersonById(@PathVariable(name = "person-id", required = true) Long personId) {
+    @GetMapping("/user/{user-id}")
+    public ResponseEntity<PersonRegisterResponse> getPersonById(@PathVariable(name = "user-id") @NotNull Long personId) {
         PersonRegisterResponse person = personService.findById(personId);
         if ( person != null ) {
             return ResponseEntity.ok(person);

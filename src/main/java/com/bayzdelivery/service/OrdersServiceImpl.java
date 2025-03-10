@@ -1,45 +1,48 @@
 package com.bayzdelivery.service;
 
+import com.bayzdelivery.dto.OrderResponse;
+import com.bayzdelivery.exceptions.OrderNotFoundException;
 import com.bayzdelivery.model.Orders;
 import com.bayzdelivery.repositories.OrdersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bayzdelivery.utils.OrderHelper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OrdersServiceImpl implements OrdersService {
-
-    @Autowired
-    OrdersRepository ordersRepository;
+    private final OrdersRepository ordersRepository;
 
     @Override
-    public List<Orders> getAll() {
-        List<Orders> ordersList = new ArrayList<>();
-        ordersRepository.findAll().forEach(ordersList::add);
-        return ordersList;
+    public List<OrderResponse> getAll() {
+        return ordersRepository.findAll()
+                .stream()
+                .map(OrderHelper::mapToOrdersResponse)
+                .toList();
     }
 
     @Override
-    public Orders save(Orders ord) {
-        return ordersRepository.save(ord);
+    public OrderResponse save(Orders ord) {
+        Orders savedOrder = ordersRepository.save(ord);
+        return new OrderResponse(savedOrder.getId(), savedOrder.getOrderName(), savedOrder.getOrderPrice(), savedOrder.getCustomer().getName());
     }
 
     @Override
-    public Orders findById(Long orderId) {
-        Optional<Orders> dbOrders = ordersRepository.findById(orderId);
-        return dbOrders.orElse(null);
+    public OrderResponse findById(Long orderId) {
+        return ordersRepository.findById(orderId).map(OrderHelper::mapToOrdersResponse)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
+
     }
 
     @Override
-    public Orders deleteById(Long orderId) {
+    public OrderResponse deleteById(Long orderId) {
         return null;
     }
 
     @Override
-    public Orders updateOrder(Orders order) {
+    public OrderResponse updateOrder(Orders order) {
         return null;
     }
 

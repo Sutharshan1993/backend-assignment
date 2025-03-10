@@ -14,8 +14,8 @@ import java.util.List;
 
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
-    @Query("SELECT COUNT(d) FROM Delivery d WHERE d.deliveryMan.id = :deliveryManId AND d.status = 'ACTIVE'")
-    int countActiveDeliveriesByDeliveryManId(@Param("deliveryManId") Long deliveryManId);
+
+    int countByDeliveryManIdAndStatus(Long deliveryManId, DeliveryStatus status);
 
     @Query(""" 
             SELECT d.deliveryMan.id,
@@ -32,7 +32,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
             @Param("endTime") LocalDateTime endTime
     );
 
-    @Query("SELECT d FROM Delivery d WHERE d.status = :status AND d.startTime < :threshold")
+
     List<Delivery> findByStatusAndStartTimeBefore(
             @Param("status") DeliveryStatus status,
             @Param("threshold") Instant threshold

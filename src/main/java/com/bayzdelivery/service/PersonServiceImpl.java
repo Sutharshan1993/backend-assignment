@@ -5,28 +5,29 @@ import com.bayzdelivery.exceptions.PersonNotFoundException;
 import com.bayzdelivery.model.Person;
 import com.bayzdelivery.repositories.PersonRepository;
 import com.bayzdelivery.utils.PersonHelper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
-    PersonRepository personRepository;
+
+    private final PersonRepository personRepository;
 
     @Override
     public List<PersonRegisterResponse> getAll() {
         return personRepository.findAll()
                 .stream()
-                .map(PersonHelper::mapToResponse)
+                .map(PersonHelper::mapRegistedPerson)
                 .toList();
     }
 
     public PersonRegisterResponse save(Person person) {
         Person personReg;
-        if ( !person.getRole().equals("CUSTOMER") && !person.getRole().equals("DELIVERY_MAN") ) {
+        if ( !"CUSTOMER".equals(person.getRole()) && !"DELIVERY_MAN".equals(person.getRole()) ) {
             throw new IllegalArgumentException("Role must be either CUSTOMER or DELIVERY_MAN");
         }
         personReg = personRepository.save(person);

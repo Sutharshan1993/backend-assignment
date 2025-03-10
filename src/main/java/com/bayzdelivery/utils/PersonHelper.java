@@ -17,13 +17,4 @@ public class PersonHelper {
         );
     }
 
-    public static PersonRegisterResponse mapToResponse(Person person) {
-        return new PersonRegisterResponse(
-                person.getId(),
-                person.getName(),
-                person.getEmail(),
-                person.getRegistrationNumber(),
-                person.getRole()
-        );
-    }
 }

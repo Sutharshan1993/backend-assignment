@@ -20,11 +20,6 @@ public record DeliveryResponse(
         this(id, deliveryManId, null, 0.0, LocalDateTime.from(startTime), null, status, 0.0);
     }
 
-
-   /* public DeliveryResponse(Long id, Long deliveryManId, @NotNull Instant startTime, @NotNull Instant endTime, String status) {
-        this(id, deliveryManId,null,0.0, LocalDateTime.from(startTime), LocalDateTime.from(endTime), status,0.0);
-    }*/
-
     public DeliveryResponse(Long id, Long deliveryManId, @NotNull Instant startTime, @NotNull Instant endTime, String status, double commission, Double distance) {
         this(id, deliveryManId, null, distance, LocalDateTime.from(startTime), LocalDateTime.from(endTime), status, commission);
     }

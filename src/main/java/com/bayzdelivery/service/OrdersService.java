@@ -1,17 +1,18 @@
 package com.bayzdelivery.service;
 
+import com.bayzdelivery.dto.OrderResponse;
 import com.bayzdelivery.model.Orders;
 
 import java.util.List;
 
 public interface OrdersService {
-    List<Orders> getAll();
+    List<OrderResponse> getAll();
 
-    Orders save(Orders p);
+    OrderResponse save(Orders p);
 
-    Orders findById(Long orderId);
+    OrderResponse findById(Long orderId);
 
-    Orders deleteById(Long orderId);
+    OrderResponse deleteById(Long orderId);
 
-    Orders updateOrder(Orders order);
+    OrderResponse updateOrder(Orders order);
 }

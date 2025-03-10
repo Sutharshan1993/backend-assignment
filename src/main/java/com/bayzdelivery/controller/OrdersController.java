@@ -1,8 +1,9 @@
 package com.bayzdelivery.controller;
 
+import com.bayzdelivery.dto.OrderResponse;
 import com.bayzdelivery.model.Orders;
 import com.bayzdelivery.service.OrdersService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,25 +11,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrdersController {
 
-
-    @Autowired
-    OrdersService orderService;
+    private final OrdersService orderService;
 
     @PostMapping("/newOrder")
-    public ResponseEntity<Orders> register(@RequestBody Orders p) {
-        return ResponseEntity.ok(orderService.save(p));
+    public ResponseEntity<OrderResponse> newOrder(@RequestBody Orders order) {
+        return ResponseEntity.ok(orderService.save(order));
     }
 
     @GetMapping("/getAllOrder")
-    public ResponseEntity<List<Orders>> getAllOrders() {
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAll());
     }
 
     @GetMapping("/getOrder/{order-id}")
-    public ResponseEntity<Orders> getOrderById(@PathVariable(name = "order-id") Long orderId) {
-        Orders orders = orderService.findById(orderId);
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable(name = "order-id") Long orderId) {
+        OrderResponse orders = orderService.findById(orderId);
         if ( orders != null ) {
             return ResponseEntity.ok(orders);
         }

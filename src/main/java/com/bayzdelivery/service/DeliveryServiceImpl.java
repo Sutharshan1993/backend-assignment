@@ -10,6 +10,7 @@ import com.bayzdelivery.repositories.OrdersRepository;
 import com.bayzdelivery.repositories.PersonRepository;
 import com.bayzdelivery.utils.DeliveryHelper;
 import com.bayzdelivery.utils.DeliveryStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,17 +18,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
 
-    DeliveryRepository deliveryRepository;
-    OrdersRepository ordersRepository;
-    PersonRepository personRepository;
+    private final DeliveryRepository deliveryRepository;
+    private final OrdersRepository ordersRepository;
+    private final PersonRepository personRepository;
 
-    public DeliveryServiceImpl(DeliveryRepository deliveryRepository, OrdersRepository ordersRepository, PersonRepository personRepository) {
-        this.deliveryRepository = deliveryRepository;
-        this.ordersRepository = ordersRepository;
-        this.personRepository = personRepository;
-    }
 
     /**
      * Whenever a deliveryman Picks up delivery he creates a delivery entry with Status as Active or Picked up
@@ -49,7 +46,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         if ( !personRepository.existsById(delivery.getDeliveryMan().getId()) ) {
             throw new IllegalArgumentException("Delivery man does not exists");
         }
-        int activeDeliveries = deliveryRepository.countActiveDeliveriesByDeliveryManId(delivery.getDeliveryMan().getId());
+        int activeDeliveries = deliveryRepository.countByDeliveryManIdAndStatus(delivery.getDeliveryMan().getId(), DeliveryStatus.ACTIVE);
         if ( activeDeliveries > 0 ) {
             throw new IllegalArgumentException("Delivery man is already delivering an order");
         }
@@ -64,6 +61,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         return ((orderPrice * 0.05) + (distance * 0.5));
     }
 
+    /**
+     * @param distance
+     * @param deliveryId
+     * @return
+     */
     public DeliveryResponse completeDelivery(double distance, Long deliveryId) {
         Delivery deliveryCreate = deliveryRepository.findById(deliveryId)
                 .orElseThrow(() -> new DeliveryNotFoundException("Delivery not found"));
@@ -79,6 +81,10 @@ public class DeliveryServiceImpl implements DeliveryService {
         return new DeliveryResponse(updatedDelivery.getId(), updatedDelivery.getDeliveryMan().getId(), updatedDelivery.getStartTime(), updatedDelivery.getEndTime(), updatedDelivery.getStatus().toString(), updatedDelivery.getCommission(), updatedDelivery.getDistance());
     }
 
+    /**
+     * @param deliveryId
+     * @return
+     */
     public DeliveryResponse findById(Long deliveryId) {
         return deliveryRepository.findById(deliveryId)
                 .map(DeliveryHelper::mapToDeliveryResponse)
