@@ -1,5 +1,6 @@
 package com.bayzdelivery.service;
 
+import com.bayzdelivery.model.Delivery;
 import com.bayzdelivery.repositories.DeliveryRepository;
 import com.bayzdelivery.utils.DeliveryStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -35,6 +37,149 @@ public class DeliveryCheckServiceImplTest {
         when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class))).thenReturn(Collections.emptyList());
         deliveryCheckService.checkDelivery();
         verify(deliveryRepository, times(1)).findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testCheckDelivery_WithOverdueDeliveries() {
+
+        Delivery overdueDelivery1 = new Delivery();
+        overdueDelivery1.setId(1L);
+        overdueDelivery1.setStartTime(Instant.now().minusSeconds(60 * 60)); // 1 hour ago
+
+        Delivery overdueDelivery2 = new Delivery();
+        overdueDelivery2.setId(2L);
+        overdueDelivery2.setStartTime(Instant.now().minusSeconds(60 * 90)); // 1.5 hours ago
+
+        List<Delivery> overdueDeliveries = List.of(overdueDelivery1, overdueDelivery2);
+
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(overdueDeliveries);
+
+        deliveryCheckService.checkDelivery();
+
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testNotifyCustomerSupport() {
+
+        Delivery delivery = new Delivery();
+        delivery.setId(1L);
+        delivery.setStartTime(Instant.now());
+
+        deliveryCheckService.notifyCustomerSupport(delivery);
+
+    }
+
+    @Test
+    public void testCheckDelivery_ZeroOverdueThreshold() {
+
+        ReflectionTestUtils.setField(deliveryCheckService, "overdueThresholdMinutes", 0); // Set threshold to 0
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(Collections.emptyList());
+
+        deliveryCheckService.checkDelivery();
+
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testCheckDelivery_NegativeOverdueThreshold() {
+        ReflectionTestUtils.setField(deliveryCheckService, "overdueThresholdMinutes", -10); // Set threshold to -10
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(Collections.emptyList());
+
+        deliveryCheckService.checkDelivery();
+
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testCheckDelivery_RepositoryThrowsException() {
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class))).thenThrow(new RuntimeException("Database connection failed"));
+        deliveryCheckService.checkDelivery();
+        verify(deliveryRepository, times(1)).findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testCheckDelivery_MultipleOverdueDeliveries() {
+
+        Delivery overdueDelivery1 = new Delivery();
+        overdueDelivery1.setId(1L);
+        overdueDelivery1.setStartTime(Instant.now().minusSeconds(60 * 60)); // 1 hour ago
+
+        Delivery overdueDelivery2 = new Delivery();
+        overdueDelivery2.setId(2L);
+        overdueDelivery2.setStartTime(Instant.now().minusSeconds(60 * 90)); // 1.5 hours ago
+
+        List<Delivery> overdueDeliveries = List.of(overdueDelivery1, overdueDelivery2);
+
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(overdueDeliveries);
+
+        deliveryCheckService.checkDelivery();
+
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testNotifyCustomerSupport_NullDelivery() {
+        deliveryCheckService.notifyCustomerSupport(null);
+    }
+
+    @Test
+    public void testCheckDelivery_NoActiveDeliveries() {
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(Collections.emptyList());
+        deliveryCheckService.checkDelivery();
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testCheckDelivery_MixedStatusDeliveries() {
+        Delivery activeDelivery = new Delivery();
+        activeDelivery.setId(1L);
+        activeDelivery.setStatus(DeliveryStatus.ACTIVE);
+        activeDelivery.setStartTime(Instant.now().minusSeconds(60 * 60)); // 1 hour ago
+
+        Delivery completedDelivery = new Delivery();
+        completedDelivery.setId(2L);
+        completedDelivery.setStatus(DeliveryStatus.COMPLETED);
+        completedDelivery.setStartTime(Instant.now().minusSeconds(60 * 90)); // 1.5 hours ago
+
+        List<Delivery> deliveries = List.of(activeDelivery, completedDelivery);
+
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(List.of(activeDelivery));
+        deliveryCheckService.checkDelivery();
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
+        verifyNoMoreInteractions(deliveryRepository);
+    }
+
+    @Test
+    public void testCheckDelivery_FutureStartTime() {
+        Delivery futureDelivery = new Delivery();
+        futureDelivery.setId(1L);
+        futureDelivery.setStartTime(Instant.now().plusSeconds(60 * 60)); // 1 hour in the future
+
+        when(deliveryRepository.findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class)))
+                .thenReturn(Collections.emptyList());
+        deliveryCheckService.checkDelivery();
+        verify(deliveryRepository, times(1))
+                .findByStatusAndStartTimeBefore(eq(DeliveryStatus.ACTIVE), any(Instant.class));
         verifyNoMoreInteractions(deliveryRepository);
     }
 }

@@ -24,17 +24,23 @@ public class DeliveryCheckServiceImpl implements DeliveryCheckService {
     @Override
     @Scheduled(fixedRateString = "${delivery-check.scheduled-fixed-rate-ms}")
     public void checkDelivery() {
-
-        var overdueThreshold = Instant.now().minusSeconds(60L * overdueThresholdMinutes);
-        var overdueDeliveries = deliveryRepository.findByStatusAndStartTimeBefore(
-                DeliveryStatus.ACTIVE, overdueThreshold);
-        if ( !overdueDeliveries.isEmpty() ) {
-            overdueDeliveries.forEach(this::notifyCustomerSupport);
+        try {
+            var overdueThreshold = Instant.now().minusSeconds(60L * overdueThresholdMinutes);
+            var overdueDeliveries = deliveryRepository.findByStatusAndStartTimeBefore(
+                    DeliveryStatus.ACTIVE, overdueThreshold);
+            if ( !overdueDeliveries.isEmpty() ) {
+                overdueDeliveries.forEach(this::notifyCustomerSupport);
+            }
+        } catch ( Exception e ) {
+            log.error("Error while checking overdue deliveries: {}", e.getMessage(), e);
         }
-
     }
 
-    private void notifyCustomerSupport(Delivery delivery) {
+    void notifyCustomerSupport(Delivery delivery) {
+        if ( delivery == null ) {
+            log.warn("Attempted to notify customer support for a null delivery.");
+            return;
+        }
         log.info("Notification: Delivery ID {} is overdue. Started at: {}. Please notify the customer support team.", delivery.getId(), delivery.getStartTime());
     }
 }
