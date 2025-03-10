@@ -12,7 +12,7 @@ public interface OrdersService {
 
     OrderResponse findById(Long orderId);
 
-    OrderResponse deleteById(Long orderId);
+    void deleteById(Long orderId);
 
-    OrderResponse updateOrder(Orders order);
+    OrderResponse updateOrder(Long orderId, Orders updatedOrder);
 }

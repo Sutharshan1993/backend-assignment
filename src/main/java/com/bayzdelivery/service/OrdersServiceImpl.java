@@ -26,7 +26,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrderResponse save(Orders ord) {
         Orders savedOrder = ordersRepository.save(ord);
-        return new OrderResponse(savedOrder.getId(), savedOrder.getOrderName(), savedOrder.getOrderPrice(), savedOrder.getCustomer().getName());
+        return OrderHelper.mapToOrdersResponse(savedOrder);
     }
 
     @Override
@@ -37,13 +37,22 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public OrderResponse deleteById(Long orderId) {
-        return null;
+    public void deleteById(Long orderId) {
+        Orders order = ordersRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
+        ordersRepository.delete(order);
     }
 
     @Override
-    public OrderResponse updateOrder(Orders order) {
-        return null;
+    public OrderResponse updateOrder(Long orderId, Orders updatedOrder) {
+        Orders existingOrder = ordersRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with ID: " + orderId));
+
+        existingOrder.setOrderName(updatedOrder.getOrderName());
+        existingOrder.setOrderPrice(updatedOrder.getOrderPrice());
+        existingOrder.setCustomer(updatedOrder.getCustomer());
+
+        Orders savedOrder = ordersRepository.save(existingOrder);
+        return OrderHelper.mapToOrdersResponse(savedOrder);
     }
+
 
 }
