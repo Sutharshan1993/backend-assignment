@@ -13,7 +13,7 @@ public class DelayedDeliveryNotifier {
     private static final Logger LOG = LoggerFactory.getLogger(DelayedDeliveryNotifier.class);
 
     /**
-     *  Use this method for the TASK 3
+     * Use this method for the TASK 3
      */
     @Scheduled(fixedDelay = 30000)
     public void checkDelayedDeliveries() {

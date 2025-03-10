@@ -13,23 +13,23 @@ import java.util.List;
 public class OrdersController {
 
 
-        @Autowired
-        OrdersService orderService;
+    @Autowired
+    OrdersService orderService;
 
-        @PostMapping("/newOrder")
-        public ResponseEntity<Orders> register(@RequestBody Orders p) {
+    @PostMapping("/newOrder")
+    public ResponseEntity<Orders> register(@RequestBody Orders p) {
         return ResponseEntity.ok(orderService.save(p));
     }
 
-        @GetMapping("/getAllOrder")
-        public ResponseEntity<List<Orders>> getAllOrders() {
+    @GetMapping("/getAllOrder")
+    public ResponseEntity<List<Orders>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAll());
     }
 
-        @GetMapping("/getOrder/{order-id}")
-        public ResponseEntity<Orders> getOrderById(@PathVariable(name="order-id")Long orderId) {
+    @GetMapping("/getOrder/{order-id}")
+    public ResponseEntity<Orders> getOrderById(@PathVariable(name = "order-id") Long orderId) {
         Orders orders = orderService.findById(orderId);
-        if (orders != null) {
+        if ( orders != null ) {
             return ResponseEntity.ok(orders);
         }
         return ResponseEntity.notFound().build();

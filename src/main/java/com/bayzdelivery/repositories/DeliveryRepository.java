@@ -1,6 +1,5 @@
 package com.bayzdelivery.repositories;
 
-import com.bayzdelivery.dto.DeliveryManCommission;
 import com.bayzdelivery.model.Delivery;
 import com.bayzdelivery.utils.DeliveryStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,15 +18,15 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     int countActiveDeliveriesByDeliveryManId(@Param("deliveryManId") Long deliveryManId);
 
     @Query(""" 
-                    SELECT d.deliveryMan.id,
-                           d.deliveryMan.name,
-                           SUM(d.commission),
-                           COUNT(d.id)
-                       FROM Delivery d
-                       WHERE d.startTime BETWEEN :startTime AND :endTime
-                       AND d.status = 'COMPLETED'
-                       GROUP BY d.deliveryMan.id, d.deliveryMan.name
-                       ORDER BY SUM(d.commission) DESC""")
+            SELECT d.deliveryMan.id,
+                   d.deliveryMan.name,
+                   SUM(d.commission),
+                   COUNT(d.id)
+               FROM Delivery d
+               WHERE d.startTime BETWEEN :startTime AND :endTime
+               AND d.status = 'COMPLETED'
+               GROUP BY d.deliveryMan.id, d.deliveryMan.name
+               ORDER BY SUM(d.commission) DESC""")
     List<Object[]> findTopDeliveryMenByCommission(
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime

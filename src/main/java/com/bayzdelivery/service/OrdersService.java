@@ -2,7 +2,6 @@ package com.bayzdelivery.service;
 
 import com.bayzdelivery.model.Orders;
 
-
 import java.util.List;
 
 public interface OrdersService {

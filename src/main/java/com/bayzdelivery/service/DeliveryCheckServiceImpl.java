@@ -1,40 +1,40 @@
 package com.bayzdelivery.service;
 
+import com.bayzdelivery.model.Delivery;
 import com.bayzdelivery.repositories.DeliveryRepository;
 import com.bayzdelivery.utils.DeliveryStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
+@Slf4j
 @Service
 public class DeliveryCheckServiceImpl implements DeliveryCheckService {
-    @Autowired
-    DeliveryRepository deliveryRepository;
+
+    private final DeliveryRepository deliveryRepository;
+
     public DeliveryCheckServiceImpl(DeliveryRepository deliveryRepository) {
         this.deliveryRepository = deliveryRepository;
     }
 
     @Override
-    @Async
-    @Scheduled(fixedRate = 5 * 60 * 1000)
+    @Scheduled(fixedRate = 300_000)
     public void checkDelivery() {
         var now = LocalDateTime.now();
-        var overdueThreshold = now.minusMinutes(45).atZone(ZoneId.systemDefault()).toInstant();
-       // var overdueLocalDateTime = LocalDateTime.ofInstant(overdueThreshold, ZoneId.systemDefault());
+        var overdueThreshold = LocalDateTime.now().minusMinutes(45);
+        ;
         var overdueDeliveries = deliveryRepository.findByStatusAndStartTimeBefore(
-                DeliveryStatus.ACTIVE, overdueThreshold);
-        if (!overdueDeliveries.isEmpty()) {
-            overdueDeliveries.forEach(delivery -> {
-            System.out.println("Notification: Delivery ID " + delivery.getId() +
-                    " is overdue. Started at: " + delivery.getStartTime() +
-                    ". Please notify the customer support team.");
-        });
-
+                DeliveryStatus.ACTIVE, Instant.from(overdueThreshold));
+        if ( !overdueDeliveries.isEmpty() ) {
+            overdueDeliveries.forEach(this::notifyCustomerSupport);
         }
 
+    }
+
+    private void notifyCustomerSupport(Delivery delivery) {
+        log.info("Notification: Delivery ID {} is overdue. Started at: {}. Please notify the customer support team.", delivery.getId(), delivery.getStartTime());
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAsync
 public class BayzDeliveryApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(BayzDeliveryApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(BayzDeliveryApplication.class, args);
+    }
 }

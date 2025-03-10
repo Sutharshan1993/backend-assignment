@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 
 public interface DeliveryService {
 
-  DeliveryResponse createDelivery(Delivery delivery);
-  DeliveryResponse completeDelivery(Delivery delivery);
-  DeliveryResponse findById(Long deliveryId);
-  TopDeliveryMenResponse getTopDeliveryMen(LocalDateTime startTime, LocalDateTime endTime);
+    DeliveryResponse createDelivery(Delivery delivery);
+
+    DeliveryResponse completeDelivery(double distance, Long deliveryId);
+
+    DeliveryResponse findById(Long deliveryId);
+
+    TopDeliveryMenResponse getTopDeliveryMen(LocalDateTime startTime, LocalDateTime endTime);
 }

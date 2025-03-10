@@ -14,23 +14,21 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class PersonControllerTest {
 
-  MockMvc mockMvc;
+    MockMvc mockMvc;
+    @Autowired
+    PersonRepository personRepository;
+    @Mock
+    private PersonController personController;
+    @Autowired
+    private TestRestTemplate template;
 
-  @Mock
-  private PersonController personController;
+    @BeforeEach
+    public void setup() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+    }
 
-  @Autowired
-  private TestRestTemplate template;
-
-  @Autowired
-  PersonRepository personRepository;
-
-  @BeforeEach
-  public void setup() throws Exception {
-    mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
-  }
-
-  @Test
-  public void testUserShouldBeRegistered() { }
+    @Test
+    public void testUserShouldBeRegistered() {
+    }
 
 }

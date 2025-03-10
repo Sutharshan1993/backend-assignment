@@ -1,6 +1,5 @@
 package com.bayzdelivery.dto;
 
-import com.bayzdelivery.utils.DeliveryStatus;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
@@ -18,7 +17,7 @@ public record DeliveryResponse(
 ) {
 
     public DeliveryResponse(Long id, Long deliveryManId, @NotNull Instant startTime, String status) {
-        this(id, deliveryManId,null,0.0, LocalDateTime.from(startTime),null, status,0.0);
+        this(id, deliveryManId, null, 0.0, LocalDateTime.from(startTime), null, status, 0.0);
     }
 
 
@@ -27,6 +26,6 @@ public record DeliveryResponse(
     }*/
 
     public DeliveryResponse(Long id, Long deliveryManId, @NotNull Instant startTime, @NotNull Instant endTime, String status, double commission, Double distance) {
-        this(id, deliveryManId,null,distance, LocalDateTime.from(startTime), LocalDateTime.from(endTime), status,commission);
+        this(id, deliveryManId, null, distance, LocalDateTime.from(startTime), LocalDateTime.from(endTime), status, commission);
     }
 }

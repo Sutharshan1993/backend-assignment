@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <changeSet author="bayzdelivery" id="2012202001_create_tables">
         <createTable tableName="person">
@@ -22,19 +22,19 @@
             <column name="distance" type="BIGINT"/>
             <column name="price" type="BIGINT"/>
         </createTable>
-         <addForeignKeyConstraint baseColumnNames="delivery_man_id"
-            baseTableName="delivery"
-            constraintName="fk_address_person_delivery_man"
-            onDelete="CASCADE"
-            onUpdate="RESTRICT"
-            referencedColumnNames="id"
-            referencedTableName="person"/>
-          <addForeignKeyConstraint baseColumnNames="customer_id"
-            baseTableName="delivery"
-            constraintName="fk_address_person_customer"
-            onDelete="CASCADE"
-            onUpdate="RESTRICT"
-            referencedColumnNames="id"
-            referencedTableName="person"/>
+        <addForeignKeyConstraint baseColumnNames="delivery_man_id"
+                                 baseTableName="delivery"
+                                 constraintName="fk_address_person_delivery_man"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+        <addForeignKeyConstraint baseColumnNames="customer_id"
+                                 baseTableName="delivery"
+                                 constraintName="fk_address_person_customer"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
     </changeSet>
 </databaseChangeLog>

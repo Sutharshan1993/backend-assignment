@@ -6,9 +6,11 @@ import com.bayzdelivery.model.Delivery;
 
 public class DeliveryHelper {
 
-    private DeliveryHelper() {}
+    private DeliveryHelper() {
+    }
+
     public static DeliveryManCommission mapToDeliveryManCommission(Object[] row) {
-        if (row == null || row.length < 4) {
+        if ( row == null || row.length < 4 ) {
             throw new IllegalArgumentException("Invalid data format for DeliveryManCommission mapping.");
         }
 

@@ -21,7 +21,7 @@ public class Orders {
     private double orderPrice;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id",referencedColumnName = "id")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Person customer;
 
     private LocalDateTime orderTime;

@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrdersServiceImpl implements OrdersService{
+public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     OrdersRepository ordersRepository;
+
     @Override
     public List<Orders> getAll() {
         List<Orders> ordersList = new ArrayList<>();
