@@ -23,6 +23,31 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for the PersonController.
+ * <p>
+ * This class contains unit test cases for testing the functionality of
+ * the PersonController using the Spring MockMvc framework and Mockito for mocking dependencies.
+ * <p>
+ * Key Features:
+ * - Verifies that the controller interacts correctly with the PersonService.
+ * - Ensures correct HTTP response codes and payload structures for each endpoint.
+ * - Uses the ObjectMapper for JSON serialization/deserialization.
+ * <p>
+ * Dependencies:
+ * - Mocks the PersonService to isolate and test controller behavior independently.
+ * - Uses MockMvc to simulate HTTP requests and validate responses.
+ * <p>
+ * Test Methods:
+ * 1. registerNewUser_shouldReturnOkAndPersonRegisterResponse:
+ * Tests that registering a new user returns an HTTP 200 status and the expected PersonRegisterResponse.
+ * 2. getAllUsers_shouldReturnOkAndListOfPersonRegisterResponses:
+ * Verifies that fetching all users returns an HTTP 200 status and a list of user registration responses.
+ * 3. getPersonById_shouldReturnOkAndPersonRegisterResponse_whenPersonExists:
+ * Tests that fetching a user by ID returns an HTTP 200 status and the corresponding user details when the user exists.
+ * 4. getPersonById_shouldReturnNotFound_whenPersonDoesNotExist:
+ * Validates that fetching a user by a non-existent ID returns an HTTP 404 status.
+ */
 @ExtendWith(MockitoExtension.class)
 class PersonControllerTest {
 

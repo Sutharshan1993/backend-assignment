@@ -22,8 +22,39 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * OrderControllerTest is a test class that verifies the behavior of the OrdersController
+ * by mocking the OrdersService dependency and using a standalone MockMvc setup.
+ * <p>
+ * This class primarily tests the controller layer to ensure that endpoints behave
+ * as expected under various scenarios.
+ * <p>
+ * Responsibilities:
+ * - Verifying successful creation of a new order via the "/newOrder" endpoint.
+ * - Ensuring that all orders are retrieved correctly through the "/getAllOrder" endpoint.
+ * - Testing the retrieval of a specific order by ID through the "/getOrder/{id}" endpoint.
+ * - Confirming appropriate responses when trying to retrieve a non-existent order by ID.
+ * <p>
+ * Key Annotations:
+ * - @ExtendWith(MockitoExtension.class): Integrates Mockito with JUnit for dependency mocking.
+ * - @Mock: Creates mock dependencies of the OrdersService.
+ * - @InjectMocks: Injects mocks into the OrdersController instance under test.
+ * <p>
+ * Test Methods:
+ * 1. newOrder_shouldReturnOkAndOrderResponse:
+ * Tests the order creation process and asserts that the response contains the correct data.
+ * <p>
+ * 2. getAllOrders_shouldReturnOkAndListOfOrderResponses:
+ * Tests retrieval of all orders and validates the response structure and content.
+ * <p>
+ * 3. getOrderById_shouldReturnOkAndOrderResponse_whenOrderExists:
+ * Validates that the correct response is returned when a valid order ID is specified.
+ * <p>
+ * 4. getOrderById_shouldReturnNotFound_whenOrderDoesNotExist:
+ * Ensures that a 404 status is returned when a nonexistent order ID is requested.
+ */
 @ExtendWith(MockitoExtension.class)
-class OrdersControllerTest {
+class OrderControllerTest {
 
     @Mock
     private OrdersService orderService;

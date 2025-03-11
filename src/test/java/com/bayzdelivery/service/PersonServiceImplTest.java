@@ -19,6 +19,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the PersonServiceImpl class.
+ * This test class verifies the behavior of the service layer methods in the implementation of the PersonService interface.
+ * It uses Mockito framework for mocking dependencies and JUnit 5 for test execution.
+ */
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceImplTest {
 

@@ -12,6 +12,22 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Represents a delivery entity which stores details about the delivery,
+ * including its timings, distance, price, commission, associated delivery man,
+ * customer, related order, and current status.
+ * <p>
+ * This class is mapped to the "delivery" table in the database, and leverages
+ * JPA annotations for database operations.
+ * <p>
+ * Key Features:
+ * 1. Identifies a unique delivery using a primary key.
+ * 2. Maintains start and end times for the delivery.
+ * 3. Tracks the distance covered during the delivery.
+ * 4. Captures pricing and commission information.
+ * 5. Associates the delivery with a delivery person, a customer, and an order.
+ * 6. Monitors the delivery's current progress status.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

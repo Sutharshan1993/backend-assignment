@@ -18,6 +18,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service implementation for delivery operations. This class is responsible for managing delivery-related
+ * operations such as creating a delivery, completing a delivery, finding a delivery, and retrieving top
+ * delivery men based on commission.
+ * <p>
+ * Handles the core business logic for managing deliveries and communicates with the repository layer
+ * to fetch and persist data. It validates incoming requests, calculates commissions, and ensures proper
+ * delivery statuses and operations.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -61,14 +70,25 @@ public class DeliveryServiceImpl implements DeliveryService {
         return new DeliveryResponse(savedDelivery.getId(), savedDelivery.getDeliveryMan().getId(), savedDelivery.getStartTime(), savedDelivery.getStatus().toString());
     }
 
+    /**
+     * @param orderPrice
+     * @param distance
+     * @return
+     */
     private double calculateCommission(double orderPrice, double distance) {
         return ((orderPrice * 0.05) + (distance * 0.5));
     }
 
     /**
-     * @param distance
-     * @param deliveryId
-     * @return
+     * Completes a delivery by updating its status, setting the end time,
+     * calculating the commission based on the order price and distance,
+     * and saving the updated delivery details to the repository.
+     *
+     * @param distance   the distance covered for the delivery
+     * @param deliveryId the unique identifier of the delivery to be completed
+     * @return a {@code DeliveryResponse} containing the updated delivery details
+     * @throws DeliveryNotFoundException if the delivery with the specified ID does not exist
+     * @throws IllegalStateException     if the delivery is already marked as completed
      */
     public DeliveryResponse completeDelivery(double distance, Long deliveryId) {
         log.info("Entered into complete Delivery for Delivery Id:{}", deliveryId);
@@ -88,8 +108,11 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     /**
-     * @param deliveryId
-     * @return
+     * Retrieves a DeliveryResponse object for the specified delivery ID.
+     *
+     * @param deliveryId the unique identifier of the delivery to be retrieved
+     * @return a DeliveryResponse object containing the details of the delivery
+     * @throws DeliveryNotFoundException if no delivery is found with the provided ID
      */
     public DeliveryResponse findById(Long deliveryId) {
         log.info("Entered into findById for delivery Id:{}", deliveryId);
@@ -102,7 +125,15 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     /**
-     * Returns the top 3 delivery men with the highest commission.
+     * Retrieves the top delivery men based on commissions for a specified time range.
+     * The method identifies the top 3 delivery men by their commission earnings within the given period
+     * and calculates the average commission among them.
+     *
+     * @param startTime the start time of the time range to evaluate top delivery men
+     * @param endTime   the end time of the time range to evaluate top delivery men
+     * @return a TopDeliveryMenResponse containing a list of top delivery men with their commissions
+     * and the average commission of the top 3 delivery men
+     * @throws IllegalArgumentException if the start time occurs after the end time
      */
     public TopDeliveryMenResponse getTopDeliveryMen(LocalDateTime startTime, LocalDateTime endTime) {
         log.info("Entered into getTopDeliveryMen for Time Between StartTime:{}, EndTime : {}", startTime, endTime);

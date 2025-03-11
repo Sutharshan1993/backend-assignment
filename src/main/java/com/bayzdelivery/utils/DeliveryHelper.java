@@ -4,11 +4,38 @@ import com.bayzdelivery.dto.DeliveryManCommission;
 import com.bayzdelivery.dto.DeliveryResponse;
 import com.bayzdelivery.model.Delivery;
 
+/**
+ * Utility class for handling delivery-related data transformations.
+ * <p>
+ * This class consists of static methods to map delivery-related entities
+ * to their corresponding response or DTO objects. It also provides
+ * internal helper methods for data extraction and computation required
+ * within these mappings.
+ * <p>
+ * The class is designed to be non-instantiable and should only be used
+ * for its static utility methods.
+ */
 public class DeliveryHelper {
 
     private DeliveryHelper() {
     }
 
+    /**
+     * Maps an array of objects to a DeliveryManCommission record.
+     * <p>
+     * The method interprets the input data as a row containing details about
+     * a delivery man's commission, total orders completed, and performs
+     * necessary data conversions as well as computations to determine
+     * the average commission per order.
+     *
+     * @param row an Object array containing delivery man commission data. Expected to have:
+     *            - row[0]: Delivery man ID (Long),
+     *            - row[1]: Delivery man name (String),
+     *            - row[2]: Total commission (Double),
+     *            - row[3]: Total completed orders (Long).
+     * @return a DeliveryManCommission record encapsulating the parsed and computed values.
+     * @throws IllegalArgumentException if the input array is null or has less than 4 elements.
+     */
     public static DeliveryManCommission mapToDeliveryManCommission(Object[] row) {
         if ( row == null || row.length < 4 ) {
             throw new IllegalArgumentException("Invalid data format for DeliveryManCommission mapping.");

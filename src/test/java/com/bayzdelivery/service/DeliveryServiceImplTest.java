@@ -25,6 +25,29 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for {@code DeliveryServiceImpl}.
+ * <p>
+ * This class tests the functionality of the DeliveryServiceImpl class
+ * which is responsible for managing deliveries in the system.
+ * <p>
+ * The following scenarios are covered in this test class:
+ * <p>
+ * 1. Creating a delivery with all valid inputs.
+ * 2. Handling the case where the associated order does not exist.
+ * 3. Handling the case where the delivery person does not exist.
+ * 4. Handling the case where the delivery person already has an active delivery.
+ * 5. Successfully completing a delivery.
+ * 6. Handling the case where a delivery to complete is not found.
+ * 7. Handling the case where a delivery to complete is already in a completed state.
+ * 8. Retrieving a delivery by its ID.
+ * 9. Handling the case where the delivery to retrieve by ID is not found.
+ * 10. Retrieving the top-performing delivery personnel by commission within a time range.
+ * 11. Handling invalid time ranges when retrieving top delivery personnel.
+ * <p>
+ * Dependencies are mocked using Mockito, and assertions are used to verify
+ * expected behavior under different test scenarios.
+ */
 @ExtendWith(MockitoExtension.class)
 public class DeliveryServiceImplTest {
     @Mock

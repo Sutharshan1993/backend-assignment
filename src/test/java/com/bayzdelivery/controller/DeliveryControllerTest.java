@@ -26,6 +26,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Unit test class for DeliveryController that performs testing of REST endpoints related to delivery operations.
+ * The class uses MockMvc for simulating HTTP requests and validating the behavior of the DeliveryController.
+ * Dependencies of the controller are mocked to isolate and test the controller's logic.
+ * <p>
+ * Test methods include:
+ * - Testing successful and error scenarios for creating a delivery.
+ * - Testing completion of deliveries with valid and invalid input data.
+ * - Fetching delivery details by ID, including both valid requests and error conditions like "not found".
+ * - Retrieving the top-performing delivery personnel within a time range, including both correct input and bad requests.
+ * <p>
+ * MockMvc is initialized in the setup method to configure standalone testing of DeliveryController.
+ * Mocks for DeliveryService are configured using Mockito to simulate its behavior during tests.
+ */
 @ExtendWith(MockitoExtension.class)
 public class DeliveryControllerTest {
 
@@ -42,56 +56,29 @@ public class DeliveryControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(deliveryController).build();
     }
 
-  /*  @Test
-    public void testCreateDelivery() throws Exception {
-       *//* Orders mockOrders = new Orders();
-        mockOrders.setId(1L);
-        mockOrders.setOrderPrice(100.0);
-        Person mockDeliveryMan = new Person();
-        mockDeliveryMan.setId(123L);
-        Person customer = new Person();
-        customer.setName("<NAME>");
-        mockDeliveryMan.setName("<NAME>");
-        Delivery mockDelivery = new Delivery();
-        mockDelivery.setId(1L);
-        mockDelivery.setStatus(DeliveryStatus.ACTIVE);
-        mockDelivery.setStartTime(Instant.now());
-        mockDelivery.setDistance(10.0);
-        mockDelivery.setCustomer(customer);
-        mockDelivery.setOrders(mockOrders);
-        mockDelivery.setDeliveryMan(mockDeliveryMan);
-        *//*
-        String deliveryJson = """
-                {
-                   "id": 1,
-                   "deliveryMan": {
-                     "id": 1
-                   },
-                   "customer": {
-                     "id": 2
-                   },
-                   "order": {
-                     "id": 1,
-                     "price": 100.0
-                   },
-                   "distance": 10.0,
-                   "startTime": "2023-10-01T10:00:00",
-                   "status": "ACTIVE"
-                 }
-                
-                """;
-
-        DeliveryResponse mockResponse = new DeliveryResponse(1L, 123L, Instant.now(), "CREATED");
-
-        when(deliveryService.createDelivery(any(Delivery.class))).thenReturn(mockResponse);
-
-        mockMvc.perform(post("/delivery/createDelivery")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1, \"status\": \"CREATED\"}").content(deliveryJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.status").value("CREATED"));
-    }*/
+    /**
+     * Tests the functionality of completing a delivery through the DeliveryController.
+     * <p>
+     * This test verifies the successful completion of a delivery by mocking the service response,
+     * sending a request to the endpoint, and asserting the correctness of the HTTP response and
+     * the returned JSON structure.
+     * <p>
+     * Steps:
+     * 1. Mocks the response of the deliveryService's `completeDelivery` method with predefined values.
+     * 2. Constructs a delivery JSON payload to simulate request body data for the delivery.
+     * 3. Sends a POST request to the `/delivery/completeDelivery/{distance}/{deliveryId}` endpoint with the JSON payload.
+     * 4. Verifies that the response HTTP status is 200 (OK).
+     * 5. Asserts the response JSON contains expected values, including "id" and "status".
+     * <p>
+     * Dependencies:
+     * - MockMvc framework for simulating web requests and responses.
+     * - Mockito for service mocking.
+     * - Spring's `MediaType` for content type handling.
+     * - JSONPath for the validation of JSON response content.
+     * <p>
+     * Exceptions:
+     * - Throws any exceptions encountered during the test execution.
+     */
 
     @Test
     public void testCompleteDelivery() throws Exception {
@@ -112,6 +99,29 @@ public class DeliveryControllerTest {
                 .andExpect(jsonPath("$.status").value("COMPLETED"));
     }
 
+    /**
+     * Tests the functionality of retrieving a delivery by its ID through the DeliveryController.
+     * <p>
+     * This test verifies that the `GET /delivery/getDelivery/{id}` endpoint retrieves the
+     * correct delivery details when a valid delivery ID is provided.
+     * <p>
+     * Steps:
+     * 1. Mocks the `deliveryService.findById` method to return a predefined DeliveryResponse object.
+     * 2. Sends a GET request to the `/delivery/getDelivery/{id}` endpoint with a valid delivery ID.
+     * 3. Asserts that the HTTP status of the response is 200 (OK).
+     * 4. Verifies that the JSON response includes the expected delivery data, such as:
+     * - The "id" field matches the mock delivery ID.
+     * - The "status" field reflects the expected "DELIVERED" value from the mock response.
+     * <p>
+     * Dependencies:
+     * - MockMvc framework to simulate the web request and response flow.
+     * - Mockito to mock the behavior of the deliveryService.
+     * - Spring's `MediaType` to define the content type of the request.
+     * - JSONPath to validate specific data fields in the response JSON.
+     * <p>
+     * Exceptions:
+     * - An exception is thrown if any unexpected error occurs during test execution.
+     */
     @Test
     public void testGetDeliveryById() throws Exception {
         DeliveryResponse mockResponse = new DeliveryResponse(1L, 123L, Instant.now(), "DELIVERED");

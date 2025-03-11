@@ -7,6 +7,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class is responsible for handling notifications related to delayed deliveries.
+ * It contains methods for periodic checks and notifying the customer support team
+ * in case of delayed deliveries.
+ */
 @Component
 public class DelayedDeliveryNotifier {
 

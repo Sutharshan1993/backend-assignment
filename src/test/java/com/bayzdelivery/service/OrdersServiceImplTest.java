@@ -19,6 +19,40 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for testing the {@code OrdersServiceImpl} class.
+ * <p>
+ * This class uses Mockito for mocking dependencies and JUnit 5 for writing and
+ * running test cases. It primarily focuses on verifying the correct functionality
+ * of the service layer methods that interact with the repository layer and
+ * handling business logic associated with Orders entities.
+ * <p>
+ * Test Scenarios:
+ * - Successfully fetching all orders.
+ * - Handling the case when no orders are present in the database.
+ * - Successfully saving an order.
+ * - Finding an order by its ID (success and failure scenarios).
+ * - Deleting an order by its ID (success and failure scenarios).
+ * - Updating an order (success and failure scenarios).
+ * <p>
+ * Annotations Used:
+ * - {@code @ExtendWith(MockitoExtension.class)}: Enables Mockito's extension for
+ * dependency injection into the test class.
+ * - {@code @Mock}: Marks a mocked dependency for the repository layer.
+ * - {@code @InjectMocks}: Injects the mocked dependencies into the service
+ * implementation under test.
+ * - {@code @BeforeEach}: Sets up preconditions for each test case by initializing
+ * test data.
+ * - {@code @Test}: Marks methods that contain test logic.
+ * <p>
+ * Mocked Dependencies:
+ * - {@code OrdersRepository}: Interacts with the persistence layer for performing
+ * operations like find, save, or delete on Orders entities.
+ * <p>
+ * Test Data:
+ * - {@code Orders}: Sample order entity with predefined attributes for testing.
+ * - {@code Person}: Represents the customer associated with the order.
+ */
 @ExtendWith(MockitoExtension.class)
 public class OrdersServiceImplTest {
 

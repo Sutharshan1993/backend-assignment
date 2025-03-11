@@ -18,6 +18,22 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * This test class is responsible for testing the functionality of the DeliveryCheckServiceImpl class.
+ * It uses the Mockito framework to mock dependencies and verify the behavior of the service methods under various scenarios.
+ * <p>
+ * The class contains unit tests for the following:
+ * - Handling of overdue deliveries, including scenarios with no overdue deliveries and multiple overdue deliveries.
+ * - Notifying customer support for specific delivery instances.
+ * - Behavior of the service when the overdue threshold is set to zero or negative values.
+ * - Handling repository exceptions during delivery checks.
+ * - Scenarios involving no active deliveries, mixed delivery statuses, and deliveries with future start times.
+ * <p>
+ * Each test case uses mocking to simulate different states and interactions with the DeliveryRepository
+ * and verifies that the methods behave as expected.
+ * <p>
+ * The setup for each test case includes using ReflectionTestUtils to set specific fields on the DeliveryCheckServiceImpl instance.
+ */
 @ExtendWith(MockitoExtension.class)
 public class DeliveryCheckServiceImplTest {
     @Mock

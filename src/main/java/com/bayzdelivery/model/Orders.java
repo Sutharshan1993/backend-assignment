@@ -8,6 +8,23 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Represents the Orders entity in the system. This class is used for managing
+ * information about customer orders, including order details such as name,
+ * price, associated customer, and the order's timestamp.
+ * <p>
+ * This entity is mapped to the "orders" table in the database using JPA annotations.
+ * <p>
+ * Key Features:
+ * 1. Each order is uniquely identified by an id.
+ * 2. Captures mandatory details such as the order name and price.
+ * 3. Establishes a relationship between an order and a customer using a
+ * many-to-one association.
+ * 4. Stores the time when the order was placed.
+ * <p>
+ * Includes overridden `equals` and `hashCode` methods for comparing and
+ * hashing objects based on their properties.
+ */
 @Entity
 @Table(name = "orders")
 @Data

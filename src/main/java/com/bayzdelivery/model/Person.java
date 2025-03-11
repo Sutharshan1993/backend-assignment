@@ -12,6 +12,25 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Represents a person entity in the system with attributes such as name, email,
+ * registration number, and a specific role. This class is meant to manage user data
+ * and is used in various associations within the system.
+ * <p>
+ * This class is mapped to the "person" table in the database using JPA annotations.
+ * <p>
+ * Key Features:
+ * 1. Each person is uniquely identified by an ID.
+ * 2. Manages mandatory properties including name, email, and role, ensuring input
+ * validation for these fields.
+ * 3. Supports enumeration for the role to denote the person's function within the
+ * system (e.g., CUSTOMER, DELIVERY_MAN, ADMIN).
+ * 4. Includes overridden methods for `equals` and `hashCode` for object comparison
+ * and hashing based on key attributes.
+ * <p>
+ * Implements the Serializable interface to allow for object serialization and
+ * deserialization.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
