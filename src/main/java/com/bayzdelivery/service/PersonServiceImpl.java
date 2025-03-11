@@ -5,6 +5,7 @@ import com.bayzdelivery.exceptions.PersonNotFoundException;
 import com.bayzdelivery.model.Person;
 import com.bayzdelivery.repositories.PersonRepository;
 import com.bayzdelivery.utils.PersonHelper;
+import com.bayzdelivery.utils.PersonRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class PersonServiceImpl implements PersonService {
 
     public PersonRegisterResponse save(Person person) {
         Person personReg;
-        if ( !"CUSTOMER".equals(person.getRole()) && !"DELIVERY_MAN".equals(person.getRole()) ) {
+        if ( !PersonRole.CUSTOMER.equals(person.getRole()) && !PersonRole.DELIVERY_MAN.equals(person.getRole()) ) {
             throw new IllegalArgumentException("Role must be either CUSTOMER or DELIVERY_MAN");
         }
         personReg = personRepository.save(person);
