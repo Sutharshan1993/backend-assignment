@@ -24,10 +24,12 @@ public class DeliveryCheckServiceImpl implements DeliveryCheckService {
     @Override
     @Scheduled(fixedRateString = "${delivery-check.scheduled-fixed-rate-ms}")
     public void checkDelivery() {
+        log.info("Entered into checkDelivery");
         try {
-            var overdueThreshold = Instant.now().minusSeconds(60L * overdueThresholdMinutes);
+            var overdueTime = Instant.now().minusSeconds(60L * overdueThresholdMinutes);
+            log.info("Over Due delivery Check Time :{}", overdueTime);
             var overdueDeliveries = deliveryRepository.findByStatusAndStartTimeBefore(
-                    DeliveryStatus.ACTIVE, overdueThreshold);
+                    DeliveryStatus.ACTIVE, overdueTime);
             if ( !overdueDeliveries.isEmpty() ) {
                 overdueDeliveries.forEach(this::notifyCustomerSupport);
             }
