@@ -30,7 +30,6 @@ public class Delivery implements Serializable {
     @Column(name = "start_time")
     private Instant startTime;
 
-    @NotNull
     @Column(name = "end_time")
     private Instant endTime;
 
