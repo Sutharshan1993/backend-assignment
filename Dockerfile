@@ -1,12 +1,14 @@
-FROM gradle:7.3.3-jdk17 as gradlebuilder-clean
-RUN mkdir /project
-COPY . /project
+# Step 1: Build the application using Maven
+FROM maven:3.8.6-openjdk-17 AS builder
 WORKDIR /project
-RUN ./gradlew bootJar -DskipTests
+COPY . .
+RUN mvn clean package -DskipTests
 
 
+# Step 2: Create a lightweight runtime image
 FROM azul/zulu-openjdk-alpine:17-jre
 RUN mkdir /app
-COPY --from=gradlebuilder-clean /project/build/libs//bayzdelivery-0.0.1-SNAPSHOT.jar /app/bayzdelivery-0.0.1-SNAPSHOT.jar
+# Copy the built JAR file from the Maven build stage
+COPY --from=builder /project/target/bayzdelivery-0.0.1-SNAPSHOT.jar /app/bayzdelivery-0.0.1-SNAPSHOT.jar
 WORKDIR /app
 CMD ["java", "-jar", "bayzdelivery-0.0.1-SNAPSHOT.jar"]
