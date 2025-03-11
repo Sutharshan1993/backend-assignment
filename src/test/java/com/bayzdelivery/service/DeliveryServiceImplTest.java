@@ -44,7 +44,6 @@ public class DeliveryServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        // Initialize test data
         order = new Orders();
         order.setId(1L);
         order.setOrderPrice(100.0);
@@ -84,10 +83,7 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testCreateDelivery_OrderDoesNotExist() {
-        // Arrange
         when(ordersRepository.existsById(eq(order.getId()))).thenReturn(false);
-
-        // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             deliveryService.createDelivery(delivery);
         });
@@ -101,11 +97,8 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testCreateDelivery_DeliveryManDoesNotExist() {
-        // Arrange
         when(ordersRepository.existsById(eq(order.getId()))).thenReturn(true);
         when(personRepository.existsById(eq(deliveryMan.getId()))).thenReturn(false);
-
-        // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             deliveryService.createDelivery(delivery);
         });
@@ -119,13 +112,10 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testCreateDelivery_DeliveryManHasActiveDelivery() {
-        // Arrange
         when(ordersRepository.existsById(eq(order.getId()))).thenReturn(true);
         when(personRepository.existsById(eq(deliveryMan.getId()))).thenReturn(true);
         when(deliveryRepository.countByDeliveryManIdAndStatus(eq(deliveryMan.getId()), any(DeliveryStatus.class)))
                 .thenReturn(1);
-
-        // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             deliveryService.createDelivery(delivery);
         });
@@ -139,14 +129,9 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testCompleteDelivery_Success() {
-        // Arrange
         when(deliveryRepository.findById(eq(delivery.getId()))).thenReturn(Optional.of(delivery));
         when(deliveryRepository.save(delivery)).thenReturn(delivery);
-
-        // Act
         DeliveryResponse response = deliveryService.completeDelivery(15.0, delivery.getId());
-
-        // Assert
         assertNotNull(response);
         assertEquals(delivery.getId(), response.id());
         assertEquals(DeliveryStatus.COMPLETED.toString(), response.status());
@@ -158,10 +143,7 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testCompleteDelivery_DeliveryNotFound() {
-        // Arrange
         when(deliveryRepository.findById(eq(delivery.getId()))).thenReturn(Optional.empty());
-
-        // Act & Assert
         DeliveryNotFoundException exception = assertThrows(DeliveryNotFoundException.class, () -> {
             deliveryService.completeDelivery(15.0, delivery.getId());
         });
@@ -173,11 +155,9 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testCompleteDelivery_DeliveryAlreadyCompleted() {
-        // Arrange
         delivery.setStatus(DeliveryStatus.COMPLETED);
         when(deliveryRepository.findById(eq(delivery.getId()))).thenReturn(Optional.of(delivery));
 
-        // Act & Assert
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             deliveryService.completeDelivery(15.0, delivery.getId());
         });
@@ -201,10 +181,7 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testFindById_DeliveryNotFound() {
-        // Arrange
         when(deliveryRepository.findById(eq(delivery.getId()))).thenReturn(Optional.empty());
-
-        // Act & Assert
         DeliveryNotFoundException exception = assertThrows(DeliveryNotFoundException.class, () -> {
             deliveryService.findById(delivery.getId());
         });
@@ -215,7 +192,6 @@ public class DeliveryServiceImplTest {
 
     @Test
     public void testGetTopDeliveryMen_Success() {
-        // Arrange
         LocalDateTime startTime = LocalDateTime.now().minusDays(1);
         LocalDateTime endTime = LocalDateTime.now();
 
@@ -225,25 +201,18 @@ public class DeliveryServiceImplTest {
         );
 
         when(deliveryRepository.findTopDeliveryMenByCommission(startTime, endTime)).thenReturn(top3DeliveryMen);
-
-        // Act
         TopDeliveryMenResponse response = deliveryService.getTopDeliveryMen(startTime, endTime);
-
-        // Assert
         assertNotNull(response);
         assertEquals(2, response.topDeliveryMen().size());
-        assertEquals(150.0, response.averageCommissionOfTop3()); // (100 + 200) / 2 = 150
+        assertEquals(150.0, response.averageCommissionOfTop3());
 
         verify(deliveryRepository, times(1)).findTopDeliveryMenByCommission(startTime, endTime);
     }
 
     @Test
     public void testGetTopDeliveryMen_InvalidTimeRange() {
-        // Arrange
         LocalDateTime startTime = LocalDateTime.now();
         LocalDateTime endTime = LocalDateTime.now().minusDays(1);
-
-        // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             deliveryService.getTopDeliveryMen(startTime, endTime);
         });
