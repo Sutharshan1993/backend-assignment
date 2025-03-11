@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "b93c027d-1de1-4fe4-b9f4-35574c42f6fd",
+		"name": "BayzDelivery API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23890959",
+		"_collection_link": "https://springboottraining-7620.postman.co/workspace/Learning~e909ddc8-7482-44ba-ab78-07397dddb2df/collection/23890959-b93c027d-1de1-4fe4-b9f4-35574c42f6fd?action=share&source=collection_link&creator=23890959"
+	},
+	"item": [
+		{
+			"name": "Create Delivery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"startTime\": \"2024-03-11T10:00:00Z\",\n    \"endTime\": \"2024-03-11T11:00:00Z\",\n    \"status\": \"CREATED\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/delivery/createDelivery",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"delivery",
+						"createDelivery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Complete Delivery",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/delivery/completeDelivery/100/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"delivery",
+						"completeDelivery",
+						"100",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Delivery",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/delivery/getDelivery/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"delivery",
+						"getDelivery",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Top Delivery Men",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/delivery/top-delivery-men?startTime=2024-03-11T00:00:00Z&endTime=2024-03-11T23:59:59Z",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"delivery",
+						"top-delivery-men"
+					],
+					"query": [
+						{
+							"key": "startTime",
+							"value": "2024-03-11T00:00:00Z"
+						},
+						{
+							"key": "endTime",
+							"value": "2024-03-11T23:59:59Z"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Orders",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"orderName\": \"Laptop\",\r\n  \"orderPrice\": 1200.50,\r\n  \"customer\": {\r\n    \"id\": 1\r\n  },\r\n  \"orderTime\": \"2025-03-08T10:30:00\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/assessment/orders/newOrder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"assessment",
+						"orders",
+						"newOrder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Sutharshan\",\r\n    \"email\": \"sutharshan@gmail.com\",\r\n    \"registrationNumber\": \"REG2207\",\r\n    \"role\": \"CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/assessment/regapi/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"assessment",
+						"regapi",
+						"person"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8081"
+		}
+	]
+}
